@@ -45,13 +45,13 @@ fi
 
 
 # if dlp python environment is not installed, install it with requirements
-if [[ ! -d "$DLP_ENV"]]; then
+if [[ ! -d "$DLP_ENV" ]]; then
     python3 -m venv "$DLP_ENV"
     "$DLP_ENV_PIP" install -U yt-dlp-ejs
 fi
 
 # if web python environment is not installed, install it with requirements
-if [[ ! -d "$WEB_ENV"]]; then
+if [[ ! -d "$WEB_ENV" ]]; then
     python3 -m venv "$WEB_ENV"
     "$WEB_ENV_PIP" install -r "$WEB_REQUIREMENTS"
 fi
