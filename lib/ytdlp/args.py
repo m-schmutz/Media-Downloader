@@ -1,7 +1,7 @@
 #################################################################
 # Local Imports
 
-from ..config import DLP_ENV_PIP, DLP_ENV_PY, YT_DLP_PATH
+from ..config import DLP_ENV_PIP, DLP_ENV_PY, YT_DLP_PATH, DENO_JS_PATH
 
 
 #################################################################
@@ -28,3 +28,19 @@ UPDATE_YT_DLP = (
     YT_DLP_PATH,
     '-U'
 )
+
+
+#################################################################
+# Update Arguments
+
+GET_LINK_JSON = (
+    DLP_ENV_PY,
+    YT_DLP_PATH,
+    '--js-runtimes',
+    f'deno:{DENO_JS_PATH}',
+    '--no-playlist',
+    '-J'
+)
+
+
+
