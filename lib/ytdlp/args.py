@@ -5,7 +5,7 @@ from ..config import DLP_ENV_PIP, DLP_ENV_PY, YT_DLP_PATH, DENO_JS_PATH
 
 
 #################################################################
-# Update Arguments
+# Static Arguments
 
 UPDATE_DLP_PIP = (
     DLP_ENV_PIP,
@@ -31,16 +31,63 @@ UPDATE_YT_DLP = (
 
 
 #################################################################
-# Update Arguments
+# Dynamic Arguments
 
-GET_LINK_JSON = (
-    DLP_ENV_PY,
-    YT_DLP_PATH,
-    '--js-runtimes',
-    f'deno:{DENO_JS_PATH}',
-    '--no-playlist',
-    '-J'
-)
+def video_metadata_args(url: str):
+    return (
+        DLP_ENV_PY,
+        YT_DLP_PATH,
+        '--js-runtimes',
+        f'deno:{DENO_JS_PATH}',
+        '--no-playlist',
+        '-J',
+        '-f',
+        'bv*+ba/b',
+        url
+    )
 
 
+def audio_metadata_args(url: str):
+    return (
+        DLP_ENV_PY,
+        YT_DLP_PATH,
+        '--js-runtimes',
+        f'deno:{DENO_JS_PATH}',
+        '--no-playlist',
+        '-J',
+        '-f',
+        'ba/bestaudio',
+        url
+    )
 
+
+def video_download_args(url: str, formatIds: str, filename:str):
+    return (
+        DLP_ENV_PY,
+        YT_DLP_PATH,
+        '--js-runtimes',
+        f'deno:{DENO_JS_PATH}',
+        '-f',
+        formatIds,
+        '--merge-output-format',
+        'mp4',
+        '-o',
+        f'{filename}.mp4',
+        url
+    )
+
+
+def audio_download_args(url: str, formatIds: str, filename:str):
+    return (
+        DLP_ENV_PY,
+        YT_DLP_PATH,
+        '--js-runtimes',
+        f'deno:{DENO_JS_PATH}',
+        '-f',
+        formatIds,
+        '--audio-format',
+        'mp3',
+        '-o',
+        f'{filename}.mp3',
+        url
+    )
