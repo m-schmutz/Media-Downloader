@@ -139,3 +139,72 @@ if [[ ! -d "$DLP_ENV" ]]; then
     "$DLP_ENV_PIP" install -U yt-dlp-ejs
 fi
 
+
+
+
+
+VIDEO_FORMATS = 'video_formats'
+
+AUDIO_FORMATS = 'audio_formats'
+
+COMBINED_FORMATS = 'combined_formats'
+
+HAS_DRM = 'has_drm'
+
+
+class FormatType(Enum):
+    INVALID = 0
+    VIDEO = 1
+    AUDIO = 2
+    COMBINED = 3
+
+
+class Metadata(StrEnum):
+    UPLOADER = 'uploader'
+    TITLE = 'title'
+    DURATION = 'duration_string'
+    THUMB = 'thumbnail'
+
+
+class VideoFormat(StrEnum):
+    FORMATID = 'format_id'
+    VCODEC = 'vcodec'
+    RESOLUTION = 'resolution'
+    FPS = 'fps'
+    EXT = 'ext'
+    SIZE = 'filesize'
+    NOTE = 'format_note'
+
+
+class AudioFormat(StrEnum):
+    FORMATID = 'format_id'
+    ACODEC = 'acodec'
+    EXT = 'ext'
+    SIZE = 'filesize'
+    NOTE = 'format_note'
+
+
+class CombinedFormat(StrEnum):
+    FORMATID = 'format_id'
+    VCODEC = 'vcodec'
+    ACODEC = 'acodec'
+    RESOLUTION = 'resolution'
+    FPS = 'fps'
+    EXT = 'ext'
+    SIZE = 'filesize'
+    NOTE = 'format_note'
+
+
+best video with fallback: bv*+ba/b
+
+best audio with fallback: ba/bestaudio
+
+
+yt-dlp -x --audio-format mp3 URL
+
+
+yt-dlp -f "bv*+ba/b" --merge-output-format mp4 URL
+
+
+
+
