@@ -70,7 +70,7 @@ def get_link_metadata(url: str, excludeVideo: bool) -> dict:
     return mediaInfo | fileInfo
 
 
-def download_media_file(url: str, formatIds: str, filename: str, excludeVideo: bool):
+def download_media_file(url: str, formatIds: str, directory: str, filename: str, excludeVideo: bool):
 
     args: tuple = None
     

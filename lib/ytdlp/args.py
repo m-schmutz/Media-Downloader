@@ -61,7 +61,7 @@ def audio_metadata_args(url: str):
     )
 
 
-def video_download_args(url: str, formatIds: str, filename:str):
+def video_download_args(url: str, formatIds: str, directory: str, filename:str):
     return (
         DLP_ENV_PY,
         YT_DLP_PATH,
@@ -72,12 +72,12 @@ def video_download_args(url: str, formatIds: str, filename:str):
         '--merge-output-format',
         'mp4',
         '-o',
-        f'{filename}.mp4',
+        f'{directory}/{filename}.mp4',
         url
     )
 
 
-def audio_download_args(url: str, formatIds: str, filename:str):
+def audio_download_args(url: str, formatIds: str, directory: str, filename:str):
     return (
         DLP_ENV_PY,
         YT_DLP_PATH,
@@ -88,6 +88,6 @@ def audio_download_args(url: str, formatIds: str, filename:str):
         '--audio-format',
         'mp3',
         '-o',
-        f'{filename}.mp3',
+        f'{directory}/{filename}.mp3',
         url
     )
