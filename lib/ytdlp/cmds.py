@@ -20,7 +20,8 @@ METADATA_KEYS = (
     'uploader',
     'title',
     'duration_string',
-    'thumbnail'
+    'thumbnail',
+    'original_url'
 )
 
 FILE_INFO = (
@@ -64,6 +65,8 @@ def get_link_metadata(url: str, excludeVideo: bool) -> dict:
     mediaInfo = {k: rawJson[k] for k in METADATA_KEYS}
 
     fileInfo = {k: rawJson[k] for k in FILE_INFO}
+
+    mediaInfo['type'] = 'audio' if excludeVideo else 'video'
 
     fileInfo['filesize_approx'] = get_size(fileInfo['filesize_approx'])
 
