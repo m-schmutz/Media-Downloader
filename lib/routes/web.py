@@ -19,5 +19,7 @@ def home_page():
     return render_template('home.html')
 
 
-
+@web_bp.route('/new-download/<uuid>')
+def new_download_page(uuid:str):
+    pass
 
