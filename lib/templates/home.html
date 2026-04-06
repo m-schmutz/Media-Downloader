@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Media Downloader</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+</head>
+<body>
+    <header>
+        <h1>Media Downloader</h1>
+        <a class="button" href="/downloads">Downloads</a>
+    </header>
+
+    <main>
+        <form id="download-form" class="download-form">
+            <label for="url">Media Link</label>
+            <input type="text" id="url" name="url" placeholder="Enter media URL" required>
+
+            <label for="type">Media Type</label>
+            <select id="type" name="type" required>
+                <option value="video">Video (.mp4)</option>
+                <option value="audio">Audio (.mp3)</option>
+            </select>
+
+            <button type="submit" class="submit-btn">Check Availability</button>
+        </form>
+
+        <!-- Container where file info will be injected -->
+        <div id="file-info-container"></div>
+    </main>
+
+    <script src="/static/js/home.js"></script>
+</body>
+</html>
