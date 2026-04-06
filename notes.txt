@@ -1,209 +1,155 @@
+home.html:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Media Downloader</title>
+    <link rel="stylesheet" href="/static/css/home.css">
+</head>
+<body>
+    <header>
+        <h1>Media Downloader</h1>
+        <a class="button" href="/downloads">Downloads</a>
+    </header>
+
+    <main>
+        <form id="download-form" class="download-form">
+            <label for="url">Media Link</label>
+            <input type="text" id="url" name="url" placeholder="Enter media URL" required>
+
+            <label for="type">Media Type</label>
+            <select id="type" name="type" required>
+                <option value="video">Video (.mp4)</option>
+                <option value="audio">Audio (.mp3)</option>
+            </select>
+
+            <button type="submit" class="submit-btn">Check Availability</button>
+        </form>
+
+        <!-- Container where file info will be injected -->
+        <div id="file-info-container"></div>
+    </main>
+
+    <script src="/static/js/home.js"></script>
+</body>
+</html>
+
+
+home.js:
+
+// Get DOM elements
+const form = document.getElementById("download-form");
+const container = document.getElementById("file-info-container");
+const submitBtn = form.querySelector(".submit-btn");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    container.innerHTML = ""; // clear previous results
+
+    const url = document.getElementById("url").value;
+    const type = document.getElementById("type").value;
 
+    // --- NEW: Show loading state ---
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Checking...";
+    container.innerHTML = `<div class="loading">Checking link, please wait...</div>`;
 
+    try {
+        const response = await fetch("/api/check-link", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ url, type })
+        });
 
+        const data = await response.json();
 
-data:
-    avatars/
-        avatar_<channel_id>.jpg
+        // Clear loading message
+        container.innerHTML = "";
 
-    videos/
-        video_<video_id>.mp4
+        if (!response.ok) {
+            const errorBox = document.createElement("div");
+            errorBox.classList.add("error-box");
+            errorBox.innerHTML = `
+                <h2>Error</h2>
+                <p>${data.error || "An unknown error occurred."}</p>
+            `;
+            container.appendChild(errorBox);
+            return;
+        }
 
-    thumbnails/
-        thumbnail_<video_id>.jpg
+        // Extract file info
+        const info = data["file-info"];
 
+        const infoBox = document.createElement("div");
+        infoBox.classList.add("file-info-box");
 
+        infoBox.innerHTML = `
+            <h2>File Information</h2>
+            <img src="${info.thumbnail}" alt="Thumbnail" class="thumbnail">
 
+            <p><strong>Title:</strong> ${info.title}</p>
+            <p><strong>Uploader:</strong> ${info.uploader}</p>
+            <p><strong>Duration:</strong> ${info.duration_string}</p>
+            <p><strong>Resolution:</strong> ${info.resolution}</p>
+            <p><strong>Filesize:</strong> ${info.filesize_approx}</p>
+            <p><strong>Video Codec:</strong> ${info.vcodec}</p>
+            <p><strong>Audio Codec:</strong> ${info.acodec}</p>
+        `;
 
-sql:
-    Channels
-        - id
-        - name
+        container.appendChild(infoBox);
 
-    Videos
-        - id
-        - name
-        - duration
-        - channel_id
+    } catch (err) {
+        container.innerHTML = `
+            <div class="error-box">
+                <h2>Error</h2>
+                <p>Failed to connect to server.</p>
+            </div>
+        `;
+        console.error(err);
+    }
 
-    Audios
-        - id
-        - name
-        - duration
-        - channel_id
+    // --- NEW: Reset button state ---
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Check Availability";
+});
 
+example response from /api/check-link:
 
+{
+  "file-info": {
+    "acodec": "opus",
+    "duration_string": "32:20",
+    "filesize_approx": "719.09 MB",
+    "format_id": "399+251",
+    "fps": 60,
+    "original_url": "https://youtu.be/u8sRY0tKTuc?si=XsVdOj9-vLfPAoFq",
+    "resolution": "1920x1080",
+    "thumbnail": "https://i.ytimg.com/vi/u8sRY0tKTuc/maxresdefault.jpg",
+    "title": "This Airport Security Game is Insane",
+    "type": "video",
+    "uploader": "SMii7Y",
+    "vcodec": "av01.0.09M.08"
+  }
+}
 
 
-yt-dlp --js-runtimes /home/msch/Projects/Better-YT/binaries/deno -F "https://www.youtube.com/watch?v=0C-vi2i12o0"
-./yt-dlp --js-runtimes "deno:/home/msch/Projects/Better-YT/binaries/deno" -f "video[codec*=vp9]" -F "https://www.youtube.com/watch?v=0C-vi2i12o0"
+What is a way that I can redirect to a new webpage based on the data returned by the /api/check-link. the new webpage needs to have access to this data so that it can then initiate a download
 
 
 
-what download should be:
-    - best video
-    - best audio
-    - video format is .mp4
 
 
 
 
-yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]" URL
 
-🧠 Why this works
-bv*[ext=mp4]
 
-    bv* = best video-only stream
 
-    [ext=mp4] = must be in an mp4 container
 
-    yt‑dlp automatically picks the highest resolution + bitrate
 
-ba[ext=m4a]
-
-    ba = best audio-only stream
-
-    [ext=m4a] = must be m4a (the audio format used inside mp4)
-
-/b[ext=mp4]
-
-    fallback: if the site doesn’t offer separate video/audio streams, use the best single MP4 file
-
-
-
-
-
-# result = run(['which', 'asdf'], capture_output=True, text=True)
-# result = check_output(['which', 'asdf'])
-
-# https://www.youtube.com/watch?v=T-VZ1kL8ZgE&t
-
-# print("STDOUT:", result.stdout)
-# print("STDERR:", result.stderr)
-# print("Return code:", result.returncode)
-# python3 yt-dlp --js-runtimes "deno:/home/msch/Projects/Better-YT/binaries/deno" --print "%(title)s\n%(uploader)s\n%(upload_date)s\n%(duration)s" "https://www.youtube.com/watch?v=T-VZ1kL8ZgE&t"
-
-
-
-# python3 yt-dlp --js-runtimes "deno:/home/msch/Projects/Better-YT/binaries/deno" --print-json "{thumbnail: .thumbnail, fulltitle: .fulltitle, original_url: .original_url}" "https://www.youtube.com/watch?v=T-VZ1kL8ZgE&t"
-
-# python3 yt-dlp --js-runtimes "deno:/home/msch/Projects/Better-YT/binaries/deno" -J "https://www.youtube.com/watch?v=T-VZ1kL8ZgE&t"
-# python3 yt-dlp --js-runtimes "deno:/home/msch/Projects/Better-YT/binaries/deno" -J "https://www.youtube.com/@EmperorLemon"
-
-# python3 yt-dlp --js-runtimes yt-dlp --skip-download --print "%(thumbnail)s" "https://www.youtube.com/@LinusTechTips"\\
-
-
-# python3 yt-dlp --js-runtimes "deno:/home/msch/Projects/Better-YT/binaries/deno" --skip-download --print "%(thumbnail)s" "https://www.youtube.com/@LinusTechTips"
-
-# https://www.youtube.com/feeds/videos.xml?channel_id=UC7Ucs42FZy3uYzjrqzOIHsw
-
-# python3 yt-dlp --js-runtimes "deno:/home/msch/Projects/Better-YT/binaries/deno" -J "https://www.youtube.com/watch?v=T-VZ1kL8ZgE&t"
-
-
-
-
-
-title
-thumbnail
-channel
-uploader_url
-original_url
-duration_string
-
-does the yt-dlp-ejs need to be installed in the same python environment that the yt-dlp is being ran with
-
-
-
-
-I want to make sure that my yt-dlp-ejs package is always up to date before running. if the python environment that is currently running updates its own pip packages, does this cause issues?
-
-
-
-
-
-
-# server environment directory
-declare -r DLP_ENV="$PROJECT_DIR/dlp-venv"
-
-# server environment pip
-declare -r DLP_ENV_PIP="$DLP_ENV/bin/pip3"
-
-# server environment requirements
-declare -r DLP_REQUIREMENTS="$PROJECT_DIR/requirements/dlp.txt"
-
-
-
-# ensure that the python environment exists
-if [[ ! -d "$DLP_ENV" ]]; then
-    python3 -m venv "$DLP_ENV"
-    "$DLP_ENV_PIP" install -U yt-dlp-ejs
-fi
-
-
-
-
-
-VIDEO_FORMATS = 'video_formats'
-
-AUDIO_FORMATS = 'audio_formats'
-
-COMBINED_FORMATS = 'combined_formats'
-
-HAS_DRM = 'has_drm'
-
-
-class FormatType(Enum):
-    INVALID = 0
-    VIDEO = 1
-    AUDIO = 2
-    COMBINED = 3
-
-
-class Metadata(StrEnum):
-    UPLOADER = 'uploader'
-    TITLE = 'title'
-    DURATION = 'duration_string'
-    THUMB = 'thumbnail'
-
-
-class VideoFormat(StrEnum):
-    FORMATID = 'format_id'
-    VCODEC = 'vcodec'
-    RESOLUTION = 'resolution'
-    FPS = 'fps'
-    EXT = 'ext'
-    SIZE = 'filesize'
-    NOTE = 'format_note'
-
-
-class AudioFormat(StrEnum):
-    FORMATID = 'format_id'
-    ACODEC = 'acodec'
-    EXT = 'ext'
-    SIZE = 'filesize'
-    NOTE = 'format_note'
-
-
-class CombinedFormat(StrEnum):
-    FORMATID = 'format_id'
-    VCODEC = 'vcodec'
-    ACODEC = 'acodec'
-    RESOLUTION = 'resolution'
-    FPS = 'fps'
-    EXT = 'ext'
-    SIZE = 'filesize'
-    NOTE = 'format_note'
-
-
-best video with fallback: bv*+ba/b
-
-best audio with fallback: ba/bestaudio
-
-
-yt-dlp -x --audio-format mp3 URL
-
-
-yt-dlp -f "bv*+ba/b" --merge-output-format mp4 URL
 
 
 
