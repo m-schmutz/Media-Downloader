@@ -44,7 +44,7 @@ def check_link():
         if mediaType not in TypeValues:
             return jsonify({'error': f'Type must be either \'{TypeValues.VIDEO}\' or \'{TypeValues.AUDIO}\''}), 400
 
-        excludeVideo = (mediaType == 'audio')
+        excludeVideo: bool = (mediaType == 'audio')
 
         metadata = get_link_metadata(mediaUrl, excludeVideo)
 
@@ -57,3 +57,8 @@ def check_link():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
+@api_bp.route('/pending/<string:uuid>')
+def new_download_page(uuid:str):
+    pass

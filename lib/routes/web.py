@@ -5,6 +5,12 @@ from flask import Blueprint, render_template, request
 
 
 #################################################################
+# Local Imports
+
+from ..utils.string_utils import check_valid_uuid
+
+
+#################################################################
 # Blueprint Object
 
 # web related blueprint
@@ -19,7 +25,7 @@ def home_page():
     return render_template('home.html')
 
 
-@web_bp.route('/new-download/<uuid>')
+@web_bp.route('/new-download/<string:uuid>')
 def new_download_page(uuid:str):
     pass
 
