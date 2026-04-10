@@ -11,6 +11,7 @@ from json import loads, dumps
 
 from ..ytdlp import get_link_metadata
 from ..database import DBConnection, TypeValues
+from ..utils.string_utils import check_valid_uuid
 
 
 #################################################################
@@ -60,5 +61,12 @@ def check_link():
     
 
 @api_bp.route('/pending/<string:uuid>')
-def new_download_page(uuid:str):
-    pass
+def pending_download_info(uuid:str):
+    try:
+        issue = check_valid_uuid(uuid)
+
+        if issue:
+            return jsonify({'error': issue}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

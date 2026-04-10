@@ -13,10 +13,12 @@ UUID_LENGTH = 32
 #################################################################
 # String Utility functions
 
-def check_valid_uuid(uuid: str) -> None:
+def check_valid_uuid(uuid: str) -> None|str:
     if len(uuid) != UUID_LENGTH:
-        raise ValueError('uuid is not valid length')
+        return 'uuid is not valid length'
     
     for digit in uuid:
         if digit not in HEX_DIGITS:
-            raise ValueError(f'{digit} is not a valid uuid character')
+            return f'{digit} is not a valid uuid character'
+        
+    return None
