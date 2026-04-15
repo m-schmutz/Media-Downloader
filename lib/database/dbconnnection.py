@@ -8,7 +8,7 @@ from os.path import join
 #################################################################
 # Local Imports
 
-from .sql import INIT_TABLES, FOREIGN_KEYS, INSERT_PENDING, DELETE_PENDING
+from .sql import INIT_TABLES, FOREIGN_KEYS
 from ..config import DB_DIR
 
 
@@ -56,19 +56,19 @@ class DBConnection:
         self.conn = None
 
 
-    def insert_pending(self, uuidStr: str, jsonStr: str):
+    # def insert_pending(self, uuidStr: str, jsonStr: str):
         
-        cursor = self.conn.cursor()
+    #     cursor = self.conn.cursor()
 
-        cursor.execute(INSERT_PENDING, (uuidStr, jsonStr))
+    #     cursor.execute(INSERT_PENDING, (uuidStr, jsonStr))
 
-        cursor.close()
+    #     cursor.close()
 
 
-    def remove_pending(self, uuidStr: str):
+    # def remove_pending(self, uuidStr: str):
 
-        cursor = self.conn.cursor()
+    #     cursor = self.conn.cursor()
 
-        cursor.execute(DELETE_PENDING, (uuidStr,))
+    #     cursor.execute(DELETE_PENDING, (uuidStr,))
 
-        cursor.close()
+    #     cursor.close()

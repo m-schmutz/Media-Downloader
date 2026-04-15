@@ -1,38 +1,32 @@
 #!./web-env/bin/python3
 
-# from lib.ytdlp import update_dlp_environment, get_link_metadata, download_media_file
-# from lib.ytdlp.args import audio_download_args
+from lib.ytdlp import update_dlp_environment, get_link_metadata, get_raw_json
+from lib.ytdlp.args import audio_download_args
+
+from json import dumps
 
 
-# smittyVideo = 'https://youtu.be/u8sRY0tKTuc?si=XsVdOj9-vLfPAoFq'
+
+smittyVideo = 'https://youtu.be/u8sRY0tKTuc?si=XsVdOj9-vLfPAoFq'
 
 # githubUrl = 'https://github.com/yt-dlp/yt-dlp'
 
-# exclude = False
 
-# directory = '/home/msch/Projects/Media-Downloader/downloads'
+rawVideoJsonPath = '/home/msch/Projects/Media-Downloader/json-stuff/video-raw-meta.json'
 
-# try: 
-#     get_link_metadata(githubUrl, False)
-
-# except Exception as e:
-#     print(e)
-
-from uuid import uuid4
+rawAudioJsonPath = '/home/msch/Projects/Media-Downloader/json-stuff/audio-raw-meta.json'
 
 
-HEX_DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'}
+rawVideoMeta = get_raw_json(smittyVideo, False)
 
-def _check_valid_uuid(uuid: str):
-    if len(uuid) != 32:
-        raise ValueError('uuid is not valid length')
-    
-    for digit in uuid:
-        if digit not in HEX_DIGITS:
-            raise ValueError(f'{digit} is not a valid uuid character')
+rawAudioMeta = get_raw_json(smittyVideo, True)
 
 
 
+with open(rawVideoJsonPath, 'w') as f:
+    f.write(dumps(rawVideoMeta))
 
 
 
+with open(rawAudioJsonPath, 'w') as f:
+    f.write(dumps(rawAudioMeta))

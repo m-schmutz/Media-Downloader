@@ -43,6 +43,25 @@ def update_dlp_environment():
 
         if result.returncode:
             raise RuntimeError(result.stderr)
+        
+
+def get_raw_json(url: str, excludeVideo: bool):
+    args: tuple = None
+    
+    if excludeVideo:
+        args = audio_metadata_args(url)
+
+    else:
+        args = video_metadata_args(url)
+
+    result = run(args, capture_output=True, text=True)
+
+    if result.returncode:
+        raise RuntimeError(result.stderr)
+    
+    rawJson: dict = loads(result.stdout)
+
+    return rawJson
 
 
 def get_link_metadata(url: str, excludeVideo: bool) -> dict:

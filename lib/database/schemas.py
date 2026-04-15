@@ -5,30 +5,38 @@ from enum import StrEnum
 
 
 #################################################################
-# Pending Table schemas
+# Links Table
 
-class Pending(StrEnum):
-    TABLE_NAME = 'Pending'
-    UUID = 'uuid'
-    JSON = 'json'
-
-
-#################################################################
-# Files Table schemas
-
-class Files(StrEnum):
-    TABLE_NAME = 'Files'
+class Media(StrEnum):
+    TABLE_NAME = 'Media'
     ID = 'id'
-    PATH = 'path'
-    TYPE = 'type'
-    SIZE = 'size'
-    RESOLUTION = 'resolution'
-    FPS = 'fps'
+    UUID = 'uuid'
+    HOST = 'host'
     UPLOADER = 'uploader'
     TITLE = 'title'
     DURATION = 'duration'
 
 
-class TypeValues(StrEnum):
-    VIDEO = 'video'
-    AUDIO = 'audio'
+class Links(StrEnum):
+    TABLE_NAME = 'Links'
+    MEDIA_ID = 'media_id'
+    URL = 'url'
+
+
+class Videos(StrEnum):
+    TABLE_NAME = 'Videos'
+    MEDIA_ID = 'media_id'
+    PATH = 'path'
+    SIZE = 'size'
+    RESOLUTION = 'resolution'
+    FPS = 'fps'
+    FORMAT = 'format'
+    
+
+class Audio(StrEnum):
+    TABLE_NAME = 'Audio'
+    MEDIA_ID = 'media_id'
+    PATH = 'path'
+    SIZE = 'size'
+    FORMAT = 'format'
+

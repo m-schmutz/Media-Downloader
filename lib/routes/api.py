@@ -10,7 +10,7 @@ from json import loads, dumps
 # Local Imports
 
 from ..ytdlp import get_link_metadata
-from ..database import DBConnection, TypeValues
+from ..database import DBConnection
 from ..utils.string_utils import check_valid_uuid
 
 
@@ -24,7 +24,6 @@ api_bp = Blueprint('api', __name__)
 #################################################################
 # Api Routes
 
-
 @api_bp.route('/check-link', methods=['POST'])
 def check_link():
     try:
@@ -37,10 +36,10 @@ def check_link():
         mediaType = postData.get('type')
 
         if not mediaUrl:
-            return jsonify({'error': 'Missing required fields: url'}), 400
+            return jsonify({'error': 'Missing url'}), 400
         
         if not mediaType:
-            return jsonify({'error': 'Missing required fields: type'}), 400
+            return jsonify({'error': 'Missing media type'}), 400
         
         if mediaType not in TypeValues:
             return jsonify({'error': f'Type must be either \'{TypeValues.VIDEO}\' or \'{TypeValues.AUDIO}\''}), 400
